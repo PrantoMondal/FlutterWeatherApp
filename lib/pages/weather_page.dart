@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class WeatherPage extends StatefulWidget {
   static String routeName = '/';
+
   const WeatherPage({Key? key}) : super(key: key);
 
   @override
@@ -11,6 +12,27 @@ class WeatherPage extends StatefulWidget {
 class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      backgroundColor: Colors.blueGrey.shade900,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text('Weather'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.my_location),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
   }
 }
