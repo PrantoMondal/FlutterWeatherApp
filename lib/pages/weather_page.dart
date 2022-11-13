@@ -48,6 +48,10 @@ class _WeatherPageState extends State<WeatherPage> {
           ),
         ],
       ),
+      body: Center(
+        child: provider.hasDataLoaded? ListView() : 
+        const Text('Please wait'),
+      ),
     );
   }
 

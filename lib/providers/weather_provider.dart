@@ -15,6 +15,8 @@ class WeatherProvider extends ChangeNotifier{
   String unit = 'matric';
   String unitSymbol = celsius;
 
+  bool get hasDataLoaded => currentResponseModel != null &&
+      forecastResponseModel != null;
 
   setNewLocation (double lat, double lng){
     latitude = lat;
