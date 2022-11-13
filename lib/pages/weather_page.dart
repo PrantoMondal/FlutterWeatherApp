@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app_flutter/providers/weather_provider.dart';
+
+import '../utils/location_service.dart';
 
 class WeatherPage extends StatefulWidget {
   static String routeName = '/';
@@ -10,6 +14,17 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
+  late WeatherProvider provider;
+  bool isFirst = true;
+
+  @override
+  void didChangeDependencies() {
+    provider = Provider.of<WeatherProvider>(context);
+    _detectLocation();
+    isFirst = false;
+
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,5 +49,12 @@ class _WeatherPageState extends State<WeatherPage> {
         ],
       ),
     );
+  }
+
+  void _detectLocation() {
+    determinePosition().then((position){
+      provider.setNewLocation(position.latitude, position.longitude);
+      provider.getWeatherData();
+    });
   }
 }
