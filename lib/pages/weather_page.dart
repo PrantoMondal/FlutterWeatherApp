@@ -92,11 +92,11 @@ class _WeatherPageState extends State<WeatherPage> {
         const SizedBox(height: 20,),
         Wrap(
           children: [
-            Text('Humidity ${current.main!.humidity}% ', style: txtNormal16,),
-            Text('Pressure ${current.main!.pressure} hPa ', style: txtNormal16,),
-            Text('Visibility ${current.visibility} meter ', style: txtNormal16,),
-            Text('Wind Speed ${current.wind!.speed} meter/sec ', style: txtNormal16,),
-            Text('Degree ${current.wind!.deg}$degree ', style: txtNormal16,),
+            Text('Humidity : ${current.main!.humidity}% \t', style: txtNormal16,),
+            Text('Pressure : ${current.main!.pressure} hPa \t', style: txtNormal16,),
+            Text('Visibility : ${current.visibility} meter \t', style: txtNormal16,),
+            Text('Wind Speed : ${current.wind!.speed} meter/sec \t', style: txtNormal16,),
+            Text('Degree : ${current.wind!.deg}$degree \t', style: txtNormal16,),
           ],
         ),
         const SizedBox(height: 20,),
@@ -112,6 +112,13 @@ class _WeatherPageState extends State<WeatherPage> {
   }
 
   Widget _forecastWeatherSection() {
-    return Column();
+    final forecast = provider.forecastResponseModel;
+
+    return Column(
+      children: forecast.list!
+          .map((item) => dailyWidget(item, context))
+          .toList(),
+
+    );
   }
 }
