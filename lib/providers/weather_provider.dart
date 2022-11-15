@@ -10,6 +10,7 @@ import '../utils/constants.dart';
 class WeatherProvider extends ChangeNotifier {
   CurrentResponseModel? currentResponseModel;
   ForecastResponseModel? forecastResponseModel;
+  City? city;
   double latitude = 0.0, longitude = 0.0;
   String unit = 'metric'; //imperial
   String unitSymbol = celsius;
