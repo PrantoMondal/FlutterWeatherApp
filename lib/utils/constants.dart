@@ -7,3 +7,5 @@ const String degree = '\u00B0';
 
 const String iconPrefix = 'https://openweathermap.org/img/wn/';
 const String iconSuffix = '@2x.png';
+
+const cities = [ 'Arizona' , 'Athens', 'Bangkok', 'Berlin', 'Chiba', 'Delhi', 'Dhaka', 'Rajshahi', 'Tokyo'];

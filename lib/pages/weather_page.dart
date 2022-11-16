@@ -46,38 +46,42 @@ class _WeatherPageState extends State<WeatherPage> {
           ),
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () {},
+            onPressed: () {
+              showSearch(
+                  context: context, delegate: _CitySearchDeligate());
+            },
           ),
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () => Navigator.pushNamed(context, SettingsPage.routeName),
+            onPressed: () =>
+                Navigator.pushNamed(context, SettingsPage.routeName),
           ),
         ],
       ),
       body: Center(
         child: provider.hasDataLoaded
             ? ListView(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
-                children: [
-                  _currentWeatherSection(),
-                  _forecastWeatherSection(),
-                ],
-              )
-            :  Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(),
-                  Text('Please wait',style: txtAddress25,)
-                ],
-              ),
+          padding:
+          const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+          children: [
+            _currentWeatherSection(),
+            _forecastWeatherSection(),
+          ],
+        )
+            : Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            CircularProgressIndicator(),
+            Text('Please wait', style: txtAddress25,)
+          ],
+        ),
 
       ),
     );
   }
 
-  void _detectLocation() async  {
-    final position  = await determinePosition();
+  void _detectLocation() async {
+    final position = await determinePosition();
     provider.setNewLocation(position.latitude, position.longitude);
     provider.setTempUnit(await provider.getTempUnitPreferenceValue());
     provider.getWeatherData();
@@ -120,7 +124,7 @@ class _WeatherPageState extends State<WeatherPage> {
         ),
         Text(
           // '${current.weather![0].main} '
-              '${current.weather![0].description}',
+          '${current.weather![0].description}',
           style: txtNormal16White54,
         ),
         const SizedBox(
@@ -156,14 +160,16 @@ class _WeatherPageState extends State<WeatherPage> {
         Wrap(
           children: [
             Text(
-              'Sunrise : ${getFormattedDateTime(current.sys!.sunrise!, 'hh:mm a')}',
+              'Sunrise : ${getFormattedDateTime(
+                  current.sys!.sunrise!, 'hh:mm a')}',
               style: txtNormal16White54,
             ),
             const SizedBox(
               width: 10,
             ),
             Text(
-              'Sunset : ${getFormattedDateTime(current.sys!.sunset!, 'hh:mm a')}',
+              'Sunset : ${getFormattedDateTime(
+                  current.sys!.sunset!, 'hh:mm a')}',
               style: txtNormal16White54,
             ),
 
@@ -178,7 +184,6 @@ class _WeatherPageState extends State<WeatherPage> {
   }
 
   Widget _forecastWeatherSection() {
-
     final forecast = provider.forecastResponseModel;
     //final city = provider.city;
     return Card(
@@ -186,57 +191,84 @@ class _WeatherPageState extends State<WeatherPage> {
       color: Colors.teal.shade900,
       child: Column(
         children: forecast!.list!
-            .map((item) => ListTile(
-          leading: CircleAvatar(
-            backgroundImage: NetworkImage(
-                '$iconPrefix${item.weather![0].icon}$iconSuffix'),
-            backgroundColor: Colors.transparent,
-          ),
-          title: Row(
-            children:[
-              Text(
-                getFormattedDateTime(item.dt!, 'MMM dd'),
+            .map((item) =>
+            ListTile(
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    '$iconPrefix${item.weather![0].icon}$iconSuffix'),
+                backgroundColor: Colors.transparent,
+              ),
+              title: Row(
+                  children: [
+                    Text(
+                      getFormattedDateTime(item.dt!, 'MMM dd'),
+                      style: txtNormal16,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Icon(Icons.watch_later),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      getFormattedDateTime(item.dt!, 'hh:mm a'),
+                      style: txtNormal16White54,
+                    ),
+
+                  ]
+              ),
+              subtitle: Row(
+                  children: [
+                    Text(
+                      item.weather![0].description!,
+                      style: txtNormal12White54,
+                    ),
+                    // Text('Sun rise :${forecast2?.sunrise}',
+                    //   style: txtNormal12White54,
+                    // ),
+                    // Text('Sun set :${forecast2?.sunset}',
+                    //   style: txtNormal12White54,
+                    // ),
+
+                  ]
+              ),
+              trailing: Text(
+                '${item.main!.temp!.round()}$degree${provider.unitSymbol}',
                 style: txtNormal16,
               ),
-              const SizedBox(
-                width: 10,
-              ),
-              const Icon(Icons.watch_later),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                getFormattedDateTime(item.dt!, 'hh:mm a'),
-                style: txtNormal16White54,
-              ),
-
-            ]
-          ),
-          subtitle: Row(
-            children:[
-              Text(
-                item.weather![0].description!,
-                style: txtNormal12White54,
-              ),
-              // Text('Sun rise :${forecast2?.sunrise}',
-              //   style: txtNormal12White54,
-              // ),
-              // Text('Sun set :${forecast2?.sunset}',
-              //   style: txtNormal12White54,
-              // ),
-
-            ]
-          ),
-          trailing: Text(
-            '${item.main!.temp!.round()}$degree${provider.unitSymbol}',
-            style: txtNormal16,
-          ),
-        )
+            )
         )
             .toList(),
       ),
     );
-
-
   }
 }
+  class _CitySearchDeligate extends SearchDelegate<String>{
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    // TODO: implement buildActions
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    // TODO: implement buildLeading
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    throw UnimplementedError();
+  }
+    
+  }
+  
+
