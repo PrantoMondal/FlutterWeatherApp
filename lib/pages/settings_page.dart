@@ -1,16 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app_flutter/providers/weather_provider.dart';
 
-class SettingsPage extends StatefulWidget {
-  static String routeName ='/settings';
-  const SettingsPage({Key? key}) : super(key: key);
+class SettingsPage extends StatelessWidget {
+  static String routeName = '/settings';
 
-  @override
-  State<SettingsPage> createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
+      body: Consumer<WeatherProvider>(
+        builder: (context, provider, child) => ListView(
+          padding: const EdgeInsets.all(8.0),
+          children: [
+            SwitchListTile(
+                title: const Text('Show Temperature in Fahrenheit'),
+                subtitle: const Text('Default is Celsius'),
+                value: provider.isFahrenheit,
+                onChanged: (value) async{
+                    provider.setTempUnit(value);
+                    await provider.setTempUnitPreferenceValue(value);
+                    provider.getWeatherData();
+                })
+          ],
+        ),
+      ),
+    );
   }
 }

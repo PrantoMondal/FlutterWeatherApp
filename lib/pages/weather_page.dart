@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app_flutter/models/forecast_response_model.dart';
+import 'package:weather_app_flutter/pages/settings_page.dart';
 import 'package:weather_app_flutter/providers/weather_provider.dart';
 import 'package:weather_app_flutter/utils/constants.dart';
 import 'package:weather_app_flutter/utils/helper_functions.dart';
@@ -50,7 +50,7 @@ class _WeatherPageState extends State<WeatherPage> {
           ),
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () {},
+            onPressed: () => Navigator.pushNamed(context, SettingsPage.routeName),
           ),
         ],
       ),
@@ -76,11 +76,11 @@ class _WeatherPageState extends State<WeatherPage> {
     );
   }
 
-  void _detectLocation() {
-    determinePosition().then((position) {
-      provider.setNewLocation(position.latitude, position.longitude);
-      provider.getWeatherData();
-    });
+  void _detectLocation() async  {
+    final position  = await determinePosition();
+    provider.setNewLocation(position.latitude, position.longitude);
+    provider.setTempUnit(await provider.getTempUnitPreferenceValue());
+    provider.getWeatherData();
   }
 
   Widget _currentWeatherSection() {
@@ -180,7 +180,7 @@ class _WeatherPageState extends State<WeatherPage> {
   Widget _forecastWeatherSection() {
 
     final forecast = provider.forecastResponseModel;
-    final city = provider.city;
+    //final city = provider.city;
     return Card(
       elevation: 10,
       color: Colors.teal.shade900,
