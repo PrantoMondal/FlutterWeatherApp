@@ -42,7 +42,9 @@ class _WeatherPageState extends State<WeatherPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.my_location),
-            onPressed: () {},
+            onPressed: () {
+              _detectLocation();
+            },
           ),
           IconButton(
             icon: const Icon(Icons.search),
@@ -51,7 +53,9 @@ class _WeatherPageState extends State<WeatherPage> {
                   context: context, delegate: _CitySearchDeligate());
 
               if (result != null && result.isNotEmpty) {
-                print(result);
+                provider.convertCityToLatLng(result: result, onError: (msg){
+                  showMsg(context ,msg);
+                });
               }
             },
           ),
@@ -87,10 +91,14 @@ class _WeatherPageState extends State<WeatherPage> {
   }
 
   void _detectLocation() async {
-    final position = await determinePosition();
-    provider.setNewLocation(position.latitude, position.longitude);
-    provider.setTempUnit(await provider.getTempUnitPreferenceValue());
-    provider.getWeatherData();
+    try{
+      final position = await determinePosition();
+      provider.setNewLocation(position.latitude, position.longitude);
+      provider.setTempUnit(await provider.getTempUnitPreferenceValue());
+      provider.getWeatherData();
+    }catch(error){
+      showMsg(context, 'error');
+    }
   }
 
   Widget _currentWeatherSection() {
@@ -244,7 +252,9 @@ class _CitySearchDeligate extends SearchDelegate<String> {
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
-        onPressed: () {},
+        onPressed: () {
+          query = '';
+        },
         icon: const Icon(Icons.clear),
       )
     ];
@@ -259,11 +269,31 @@ class _CitySearchDeligate extends SearchDelegate<String> {
   }
 
   @override
-  Widget buildResults(BuildContext context) {return ListTile();
+  Widget buildResults(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.search),
+      title: Text(query),
+      onTap: () {
+        close(context, query);
+      },
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return ListView();
+    final filteredList = query.isEmpty
+        ? cities
+        : cities
+            .where((city) => city.toLowerCase().startsWith(query.toLowerCase()))
+            .toList();
+    return ListView.builder(
+        itemCount: filteredList.length,
+        itemBuilder: (context, index) => ListTile(
+              title: Text(filteredList[index]),
+              onTap: () {
+                query = filteredList[index];
+                close(context, query);
+              },
+            ));
   }
 }
